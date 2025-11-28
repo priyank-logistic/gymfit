@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { profileAPI } from "@/services/api";
+import { FaRobot, FaTimes, FaPaperPlane, FaSpinner } from "react-icons/fa";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,76 +104,48 @@ export default function Chatbot() {
     <>
       <button
         onClick={handleToggleChat}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-[#f2b705] text-white rounded-full shadow-lg hover:bg-[#d4a004] transition-all duration-300 flex items-center justify-center z-50 hover:scale-110"
+        className="fixed bottom-6 right-6 w-16 h-16 bg-[#f2b705] text-black rounded-full shadow-lg hover:bg-[#d4a004] transition-all duration-300 flex items-center justify-center z-50 hover:scale-110 shadow-[0_0_20px_rgba(242,183,5,0.4)]"
         aria-label="Open chatbot"
       >
         {isOpen ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
+          <FaTimes className="h-6 w-6" />
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-            />
-          </svg>
+          <FaRobot className="h-7 w-7" />
         )}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 bg-black rounded-lg shadow-2xl flex flex-col z-50 border border-[#f2b705]/20 h-[830px]">
-          <div className="bg-[#f2b705] text-white p-4 rounded-t-lg flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-              <h3 className="font-semibold text-lg">Chat Assistant</h3>
+        <div className="fixed bottom-28 right-6 w-96 bg-black/95 backdrop-blur-xl rounded-2xl shadow-2xl flex flex-col z-50 border border-white/10 h-[600px] overflow-hidden">
+          <div className="bg-gradient-to-r from-[#f2b705] to-[#d4a004] text-black p-4 rounded-t-2xl flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-black/20 flex items-center justify-center">
+                <FaRobot className="text-black text-lg" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">Chat Assistant</h3>
+                <p className="text-xs text-black/70">Always here to help</p>
+              </div>
             </div>
             <button
               onClick={handleToggleChat}
-              className="text-white hover:text-gray-200 transition-colors"
+              className="text-black hover:text-black/70 transition-colors p-1 rounded-lg hover:bg-black/10"
               aria-label="Close chat"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <FaTimes className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black">
             {messages.length === 0 ? (
-              <div className="text-center text-gray-500 mt-8">
-                <p className="text-sm">
-                  Start a conversation with your assistant!
+              <div className="text-center text-gray-400 mt-12">
+                <div className="w-16 h-16 rounded-full bg-[#f2b705]/10 flex items-center justify-center mx-auto mb-4">
+                  <FaRobot className="text-[#f2b705] text-2xl" />
+                </div>
+                <p className="text-sm font-semibold text-white mb-1">
+                  Start a conversation
+                </p>
+                <p className="text-xs text-gray-500">
+                  Ask me anything about your fitness journey!
                 </p>
               </div>
             ) : (
@@ -184,16 +157,18 @@ export default function Chatbot() {
                   }`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-lg p-3 ${
+                    className={`max-w-[80%] rounded-xl p-3 ${
                       msg.type === "user"
-                        ? "bg-[#f2b705] text-white"
-                        : "bg-white text-gray-800 shadow-sm border border-gray-200"
+                        ? "bg-gradient-to-r from-[#f2b705] to-[#d4a004] text-black shadow-[0_0_15px_rgba(242,183,5,0.3)]"
+                        : "bg-white/5 backdrop-blur-sm text-white border border-white/10"
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                      {msg.content}
+                    </p>
                     <p
-                      className={`text-xs mt-1 ${
-                        msg.type === "user" ? "text-blue-100" : "text-gray-400"
+                      className={`text-xs mt-2 ${
+                        msg.type === "user" ? "text-black/60" : "text-gray-400"
                       }`}
                     >
                       {new Date(msg.timestamp).toLocaleTimeString([], {
@@ -207,17 +182,20 @@ export default function Chatbot() {
             )}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white text-gray-800 rounded-lg p-3 shadow-sm border border-gray-200">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                <div className="bg-white/5 backdrop-blur-sm text-white rounded-xl p-4 border border-white/10">
+                  <div className="flex space-x-2 items-center">
+                    <div className="w-2 h-2 bg-[#f2b705] rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-[#f2b705] rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-[#f2b705] rounded-full animate-bounce"
                       style={{ animationDelay: "0.4s" }}
                     ></div>
+                    <span className="text-xs text-gray-400 ml-2">
+                      Thinking...
+                    </span>
                   </div>
                 </div>
               </div>
@@ -227,15 +205,15 @@ export default function Chatbot() {
 
           <form
             onSubmit={handleSendMessage}
-            className="border-t border-gray-200 p-4 rounded-b-lg"
+            className="border-t border-white/10 p-4 bg-black/50 backdrop-blur-sm"
           >
-            <div className="flex space-x-2">
+            <div className="flex space-x-3">
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f2b705] focus:border-transparent"
+                className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#f2b705]/50 focus:border-[#f2b705]/50 transition-all"
                 disabled={isLoading || !chatId || !userEmail}
               />
               <button
@@ -243,22 +221,13 @@ export default function Chatbot() {
                 disabled={
                   !inputMessage.trim() || isLoading || !chatId || !userEmail
                 }
-                className="px-4 py-2 bg-[#f2b705] text-black rounded-lg hover:bg-[#d4a004] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className="px-5 py-2.5 bg-[#f2b705] text-black rounded-lg hover:bg-[#d4a004] transition-colors disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center shadow-md hover:shadow-lg hover:shadow-[#f2b705]/30"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  />
-                </svg>
+                {isLoading ? (
+                  <FaSpinner className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FaPaperPlane className="h-4 w-4" />
+                )}
               </button>
             </div>
           </form>

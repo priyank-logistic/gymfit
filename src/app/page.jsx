@@ -29,7 +29,6 @@ export default function HomePage() {
     }
   }, []);
 
-  // Auto-slide testimonials every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % 4);
@@ -44,17 +43,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* Animated Background */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Gradient Orbs - Reduced Opacity, Rearranged Layout */}
         <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-[#f2b705] rounded-full blur-[120px] opacity-15 animate-orb-1"></div>
         <div className="absolute bottom-20 left-10 w-[450px] h-[450px] bg-[#f2b705] rounded-full blur-[120px] opacity-12 animate-orb-2"></div>
         <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-[#f2b705] rounded-full blur-[120px] opacity-10 animate-orb-3"></div>
         <div className="absolute bottom-1/3 left-1/4 w-[480px] h-[480px] bg-[#f2b705] rounded-full blur-[120px] opacity-8 animate-orb-4"></div>
         <div className="absolute top-1/4 left-1/2 w-[420px] h-[420px] bg-[#f2b705] rounded-full blur-[120px] opacity-10 animate-orb-5"></div>
 
-        {/* Floating Gym Equipment Icons */}
-        {/* Man Flexing Biceps */}
         <div className="absolute top-32 left-20 text-[#f2b705] opacity-15 animate-float-1">
           <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
             <circle cx="12" cy="6" r="3" fill="currentColor" />
@@ -114,7 +109,6 @@ export default function HomePage() {
             <path d="M6.5 2C5.67 2 5 2.67 5 3.5v17c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-17C8 2.67 7.33 2 6.5 2zm11 0c-.83 0-1.5.67-1.5 1.5v17c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-17C19 2.67 18.33 2 17.5 2zM3 7h2v10H3V7zm16 0h2v10h-2V7z" />
           </svg>
         </div>
-        {/* Exercise Machine */}
         <div className="absolute bottom-40 right-32 text-[#f2b705] opacity-12 animate-float-2">
           <svg className="w-20 h-20" fill="currentColor" viewBox="0 0 24 24">
             <rect
@@ -154,7 +148,6 @@ export default function HomePage() {
             />
           </svg>
         </div>
-        {/* Gym Building */}
         <div className="absolute top-1/2 left-10 text-[#f2b705] opacity-18 animate-float-3">
           <svg className="w-14 h-14" fill="currentColor" viewBox="0 0 24 24">
             <rect x="4" y="8" width="16" height="12" fill="currentColor" />
@@ -166,7 +159,6 @@ export default function HomePage() {
             <rect x="9" y="2" width="6" height="2" fill="currentColor" />
           </svg>
         </div>
-        {/* Woman Flexing Biceps */}
         <div className="absolute top-1/4 right-20 text-[#f2b705] opacity-15 animate-float-4">
           <svg className="w-18 h-18" fill="currentColor" viewBox="0 0 24 24">
             <circle cx="12" cy="5" r="2.5" fill="currentColor" />
@@ -221,7 +213,6 @@ export default function HomePage() {
             />
           </svg>
         </div>
-        {/* Barbell */}
         <div className="absolute bottom-1/4 right-1/4 text-[#f2b705] opacity-14 animate-float-5">
           <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
             <rect x="2" y="10" width="20" height="4" rx="2" />
@@ -229,7 +220,6 @@ export default function HomePage() {
             <rect x="19" y="8" width="4" height="8" rx="2" />
           </svg>
         </div>
-        {/* Resistance Band */}
         <div className="absolute top-3/4 left-1/3 text-[#f2b705] opacity-16 animate-float-6">
           <svg
             className="w-12 h-12"
@@ -242,7 +232,6 @@ export default function HomePage() {
           </svg>
         </div>
 
-        {/* Animated Gradient Mesh */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#f2b705]/5 via-transparent to-[#f2b705]/5 animate-gradient-shift"></div>
       </div>
       <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-sm border-b border-[#f2b705]/20">
@@ -254,7 +243,6 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 href="#home"
@@ -337,7 +325,6 @@ export default function HomePage() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden text-[#f2b705]"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -359,7 +346,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-black border-t border-[#f2b705]/20">
             <div className="container mx-auto px-4 py-4 space-y-3">
@@ -443,7 +429,6 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* Hero Section */}
       <section id="home" className="pt-32 pb-20 px-4">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -476,7 +461,6 @@ export default function HomePage() {
             </div>
             <div className="relative">
               <div className="relative w-full h-[500px] md:h-[600px] rounded-2xl overflow-hidden border border-[#f2b705]/30">
-                {/* Video Background */}
                 <video
                   autoPlay
                   loop
@@ -485,14 +469,11 @@ export default function HomePage() {
                   className="absolute inset-0 w-full h-full object-cover"
                 >
                   <source src="/hero.mp4" type="video/mp4" />
-                  {/* <source src="/hero-video.webm" type="video/webm" /> */}
                   Your browser does not support the video tag.
                 </video>
 
-                {/* Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-                {/* Stats Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-black/80 backdrop-blur-sm rounded-lg p-4 border border-[#f2b705]/30">
@@ -517,7 +498,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             <div className="text-center">
               <p className="text-3xl font-bold text-[#f2b705] mb-2">96%</p>
@@ -587,7 +567,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Our Plans */}
       <section id="membership" className="py-20 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
@@ -673,7 +652,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Our Fitness Tools */}
       <section className="py-20 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
@@ -710,7 +688,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="py-20 px-4 bg-black">
         <div className="container mx-auto">
           <div className="text-center mb-12">
@@ -721,7 +698,6 @@ export default function HomePage() {
             </p>
           </div>
           <div className="max-w-4xl mx-auto relative">
-            {/* Testimonials Slider */}
             <div className="relative overflow-hidden">
               <div
                 className="flex transition-transform duration-500 ease-in-out"
@@ -1003,7 +979,7 @@ export default function HomePage() {
                     onClick={() => router.push("/login")}
                     className="w-full py-3 border border-[#f2b705] text-[#f2b705] rounded-lg font-semibold hover:bg-[#f2b705]/10 transition-colors"
                   >
-                    Sign Up With Google
+                    Log In
                   </button>
                 </div>
               </div>
@@ -1012,7 +988,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="py-20 px-4 bg-black">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-4xl font-bold text-center mb-12">FAQ</h2>

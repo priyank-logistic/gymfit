@@ -20,11 +20,9 @@ export default function LoginPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
       if (token) {
-        // User is already logged in, redirect to dashboard
         router.push("/dashboard");
       } else {
         setCheckingAuth(false);
@@ -60,7 +58,6 @@ export default function LoginPage() {
       ...prev,
       [name]: value,
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -88,17 +85,14 @@ export default function LoginPage() {
         password: formData.password,
       });
 
-      // Store token if provided
       if (response.token) {
         localStorage.setItem("token", response.token);
       }
 
-      // Store user data if provided
       if (response.user) {
         localStorage.setItem("user", JSON.stringify(response.user));
       }
 
-      // Redirect to dashboard
       router.push("/dashboard");
     } catch (error) {
       const errorMessage =
@@ -111,7 +105,6 @@ export default function LoginPage() {
     }
   };
 
-  // Show loading while checking authentication
   if (checkingAuth) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -126,7 +119,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-black px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Logo */}
         <div className="text-center mb-8">
           <Link
             href="/"
@@ -171,15 +163,6 @@ export default function LoginPage() {
               required
               autoComplete="current-password"
             />
-
-            <div className="flex justify-end">
-              <Link
-                href="#"
-                className="text-sm text-[#f2b705] hover:text-[#d4a004] font-medium transition-colors"
-              >
-                Forgot Password?
-              </Link>
-            </div>
 
             {apiError && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">

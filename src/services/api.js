@@ -281,6 +281,61 @@ export const profileAPI = {
     );
     return response.data;
   },
+
+  validateExercise: async (file, email) => {
+    const token =
+      typeof window !== "undefined" && localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("email", email);
+
+    const headers = {
+      "Content-Type": "multipart/form-data",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const response = await axios.post(
+      `${PROFILE_API_URL}/profile/exercise/validate`,
+      formData,
+      { headers }
+    );
+    return response.data;
+  },
+
+  submitExerciseFollowUp: async (followUpData) => {
+    const token =
+      typeof window !== "undefined" && localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const response = await axios.post(
+      `${PROFILE_API_URL}/profile/exercise/follow-up`,
+      followUpData,
+      { headers }
+    );
+    return response.data;
+  },
+
+  getAnalysis: async (email, weekStart, weekEnd) => {
+    const token =
+      typeof window !== "undefined" && localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    const response = await axios.post(
+      `${PROFILE_API_URL}/profile/analysis`,
+      { email, week_start: weekStart, week_end: weekEnd },
+      { headers }
+    );
+    return response.data;
+  },
 };
 
 export default api;

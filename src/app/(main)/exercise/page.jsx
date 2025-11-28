@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { profileAPI } from "@/services/api";
 import {
   FaDumbbell,
@@ -22,12 +23,36 @@ const daysOfWeek = [
 ];
 
 export default function Exercise() {
+  const router = useRouter();
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [downloading, setDownloading] = useState(false);
+  const [followUpStatus, setFollowUpStatus] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const checkFollowUpStatus = () => {
+    if (typeof window !== "undefined") {
+      const followUpData = localStorage.getItem("exercise_followup");
+      if (followUpData) {
+        try {
+          const data = JSON.parse(followUpData);
+          const today = new Date().toISOString().split("T")[0];
+          if (data.date === today) {
+            setFollowUpStatus("completed");
+            return true;
+          }
+        } catch (e) {
+          console.error("Error parsing follow-up data:", e);
+        }
+      }
+      setFollowUpStatus("pending");
+      return false;
+    }
+    return false;
+  };
 
   useEffect(() => {
     const loadUser = () => {
@@ -43,6 +68,19 @@ export default function Exercise() {
       }
     };
     loadUser();
+    checkFollowUpStatus();
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        checkFollowUpStatus();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -124,7 +162,6 @@ export default function Exercise() {
     try {
       const blob = await profileAPI.downloadWorkoutPlanPDF(user.email);
 
-      // Create a download link
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement("a");
       link.href = url;
@@ -148,9 +185,24 @@ export default function Exercise() {
     }
   };
 
+  const handleFollowUpClick = () => {
+    if (followUpStatus === "completed") {
+      return;
+    }
+    setShowPopup(true);
+  };
+
+  const handleConfirmFollowUp = () => {
+    setShowPopup(false);
+    router.push("/exercise/verify");
+  };
+
+  const handleCancelFollowUp = () => {
+    setShowPopup(false);
+  };
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#f2b705]/10 rounded-full blur-[120px] animate-orb-1" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#f2b705]/5 rounded-full blur-[120px] animate-orb-2" />
@@ -159,7 +211,6 @@ export default function Exercise() {
 
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="w-full mx-auto">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div className="space-y-2">
               <h1 className="text-2xl md:text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-500">
@@ -170,54 +221,72 @@ export default function Exercise() {
               </p>
             </div>
             {workoutPlan?.workout_plan && (
-              <button
-                onClick={handleDownloadPDF}
-                disabled={downloading}
-                className="px-6 py-2.5 bg-[#f2b705] text-black rounded-lg font-semibold hover:bg-[#d4a004] transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-              >
-                {downloading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-4 w-4 text-black"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
+              <div className="flex gap-3">
+                <button
+                  onClick={handleFollowUpClick}
+                  disabled={followUpStatus === "completed"}
+                  className={`px-6 py-2.5 rounded-lg font-semibold transition-colors shadow-md hover:shadow-lg flex items-center space-x-2 ${
+                    followUpStatus === "completed"
+                      ? "bg-gray-600 text-gray-300 cursor-not-allowed opacity-60"
+                      : "bg-green-600 text-white hover:bg-green-700"
+                  }`}
+                >
+                  <FaCheckCircle className="w-4 h-4" />
+                  <span className="text-sm">
+                    {followUpStatus === "completed"
+                      ? "Follow Up Complete"
+                      : "Follow Up Pending"}
+                  </span>
+                </button>
+                <button
+                  onClick={handleDownloadPDF}
+                  disabled={downloading}
+                  className="px-6 py-2.5 bg-[#f2b705] text-black rounded-lg font-semibold hover:bg-[#d4a004] transition-colors shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {downloading ? (
+                    <>
+                      <svg
+                        className="animate-spin h-4 w-4 text-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      <span className="text-sm">Downloading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
                         stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    <span className="text-sm">Downloading...</span>
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H4a2 2 0 01-2-2V6a2 2 0 012-2h7.414l2.586 2.586A2 2 0 0116 7.414V18a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                    <span className="text-sm">Download PDF</span>
-                  </>
-                )}
-              </button>
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H4a2 2 0 01-2-2V6a2 2 0 012-2h7.414l2.586 2.586A2 2 0 0116 7.414V18a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      <span className="text-sm">Download PDF</span>
+                    </>
+                  )}
+                </button>
+              </div>
             )}
           </div>
 
@@ -240,7 +309,6 @@ export default function Exercise() {
             </div>
           ) : workoutPlan?.workout_plan ? (
             <div className="space-y-6">
-              {/* Week Header */}
               <div className="bg-gradient-to-r from-[#f2b705] to-[#d4a004] rounded-2xl p-5">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-black/20 flex items-center justify-center">
@@ -258,7 +326,6 @@ export default function Exercise() {
                 </div>
               </div>
 
-              {/* Day Selector */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4">
                 <div className="flex flex-wrap gap-2">
                   {daysOfWeek.map((day) => {
@@ -285,7 +352,6 @@ export default function Exercise() {
                 </div>
               </div>
 
-              {/* Selected Day Exercises */}
               {selectedDay && workoutPlan.workout_plan[selectedDay] && (
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden">
                   <div className="bg-gradient-to-r from-[#f2b705] to-[#d4a004] p-5">
@@ -363,7 +429,6 @@ export default function Exercise() {
                 </div>
               )}
 
-              {/* Weekly Overview */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-5">
                 <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                   <FaFire className="text-[#f2b705]" />
@@ -412,6 +477,57 @@ export default function Exercise() {
           )}
         </div>
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 md:p-8 max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                <svg
+                  className="w-6 h-6 text-yellow-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-white">
+                Follow Up Reminder
+              </h3>
+            </div>
+            <p className="text-gray-300 mb-2">
+              <strong className="text-white">Important:</strong> You can only
+              give follow-up{" "}
+              <strong className="text-[#f2b705]">once per day</strong>.
+            </p>
+            <p className="text-gray-400 text-sm mb-6">
+              Please make sure you have completed your workout before submitting
+              your follow-up. This helps us provide accurate analysis of your
+              exercise progress.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={handleCancelFollowUp}
+                className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition-colors border border-white/10"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmFollowUp}
+                className="flex-1 px-4 py-2.5 bg-[#f2b705] text-black rounded-lg font-semibold hover:bg-[#d4a004] transition-colors shadow-md hover:shadow-lg"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
