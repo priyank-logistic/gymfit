@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1763732138982",
+    "name": "priyank",
+    "email": "priyank@logisticinfotech.co.in",
+    "phone": "9313202075",
+    "password": "$2b$10$W9PiFO2z3LshW2pFRWi1yOhlj6g36oSLPQ6lihHFvpPUetv2WeH1a",
+    "createdAt": "2025-11-21T13:35:38.982Z",
+    "onboardingCompleted": false
+  },
+  {
+    "id": "1764077704561",
+    "name": "jatin",
+    "email": "jatin@gmail.com",
+    "phone": "9313202077",
+    "password": "$2b$10$egxni9zJR0purxe2LPS72OZ.53qwzShBa.6f.5NjClEXNlOj6Dlva",
+    "createdAt": "2025-11-25T13:35:04.561Z",
+    "onboardingCompleted": false
+  }
+]
