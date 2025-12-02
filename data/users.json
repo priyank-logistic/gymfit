@@ -16,5 +16,14 @@
     "password": "$2b$10$egxni9zJR0purxe2LPS72OZ.53qwzShBa.6f.5NjClEXNlOj6Dlva",
     "createdAt": "2025-11-25T13:35:04.561Z",
     "onboardingCompleted": false
+  },
+  {
+    "id": "1764651209828",
+    "name": "priyank",
+    "email": "priyankviradiya@gmail.com",
+    "phone": "9321456989",
+    "password": "$2b$10$Fx/aUhe0Rr47SemnOoHWlePVrXn2p.Uc8vwcvq6Ixddc08DWOsKOu",
+    "createdAt": "2025-12-02T04:53:29.828Z",
+    "onboardingCompleted": false
   }
 ]

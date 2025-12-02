@@ -165,7 +165,7 @@ export default function LoginPage() {
             />
 
             {apiError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-900/20 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
                 {apiError}
               </div>
             )}

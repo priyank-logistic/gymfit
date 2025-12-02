@@ -99,7 +99,7 @@ export default function Exercise() {
         setError(null);
 
         const response = await axios.post(
-          "http://192.168.0.25:8000/profile/workout-plan",
+          `${process.env.NEXT_PUBLIC_PROFILE_API_URL}/profile/workout-plan`,
           {
             name: user.name,
             email: user.email,

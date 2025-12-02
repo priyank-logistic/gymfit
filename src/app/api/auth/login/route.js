@@ -23,8 +23,11 @@ export async function POST(request) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid email/phone or password" },
-        { status: 401 }
+        {
+          error:
+            "User does not exist. Please check your email/phone or sign up for a new account.",
+        },
+        { status: 404 }
       );
     }
 
@@ -32,7 +35,7 @@ export async function POST(request) {
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json(
-        { error: "Invalid email/phone or password" },
+        { error: "Incorrect password. Please try again." },
         { status: 401 }
       );
     }
@@ -59,4 +62,3 @@ export async function POST(request) {
     );
   }
 }
-

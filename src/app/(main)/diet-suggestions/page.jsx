@@ -10,7 +10,7 @@ import {
   FaTint,
   FaHistory,
   FaEdit,
-  FaUtensils
+  FaUtensils,
 } from "react-icons/fa";
 
 export default function DietSuggestions() {
@@ -48,8 +48,8 @@ export default function DietSuggestions() {
         console.error("Error fetching diet plan:", err);
         setError(
           err.response?.data?.message ||
-          err.response?.data?.error ||
-          "Failed to load diet plan. Please try again."
+            err.response?.data?.error ||
+            "Failed to load diet plan. Please try again."
         );
       } finally {
         setLoading(false);
@@ -86,9 +86,7 @@ export default function DietSuggestions() {
             {Icon && <Icon className="w-3 h-3" style={{ color }} />}
             {label}
           </span>
-          <span className="font-bold text-white">
-            {value}g
-          </span>
+          <span className="font-bold text-white">{value}g</span>
         </div>
         <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
           <div
@@ -96,7 +94,7 @@ export default function DietSuggestions() {
             style={{
               width: `${percentage}%`,
               backgroundColor: color,
-              boxShadow: `0 0 10px ${color}40`
+              boxShadow: `0 0 10px ${color}40`,
             }}
           />
         </div>
@@ -124,13 +122,19 @@ export default function DietSuggestions() {
               {mealName}
             </h3>
             <div className="flex flex-col items-end">
-              <span className="text-xl font-bold text-[#f2b705]">{meal.total?.calories || 0}</span>
-              <span className="text-[10px] text-gray-400 uppercase tracking-wider">Kcal</span>
+              <span className="text-xl font-bold text-[#f2b705]">
+                {meal.total?.calories || 0}
+              </span>
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider">
+                Kcal
+              </span>
             </div>
           </div>
 
           <div className="mb-4">
-            <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Menu Items</h4>
+            <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">
+              Menu Items
+            </h4>
             <div className="flex flex-wrap gap-1.5">
               {meal.items?.map((item, index) => (
                 <span
@@ -170,10 +174,10 @@ export default function DietSuggestions() {
           {meal.recipe && (
             <div className="mt-4 pt-4 border-t border-white/10">
               <h4 className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">
-                Chef's Note
+                Chef&apos;s Note
               </h4>
               <p className="text-xs text-gray-400 leading-relaxed italic">
-                "{meal.recipe}"
+                &quot;{meal.recipe}&quot;
               </p>
             </div>
           )}
@@ -195,7 +199,9 @@ export default function DietSuggestions() {
           {value}
           <span className="text-xs font-normal text-gray-400 ml-1">{unit}</span>
         </div>
-        <div className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">{label}</div>
+        <div className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">
+          {label}
+        </div>
       </div>
     </div>
   );
@@ -217,9 +223,12 @@ export default function DietSuggestions() {
                 Diet Plan
               </h1>
               <p className="text-sm md:text-base text-gray-400 max-w-2xl">
-                Fuel your body with precision. Your personalized nutrition roadmap for
+                Fuel your body with precision. Your personalized nutrition
+                roadmap for
                 <span className="text-[#f2b705] font-semibold ml-2">
-                  {dietPlan?.date || dietPlan?.diet_plan?.date ? formatDate(dietPlan.date || dietPlan.diet_plan?.date) : "Today"}
+                  {dietPlan?.date || dietPlan?.diet_plan?.date
+                    ? formatDate(dietPlan.date || dietPlan.diet_plan?.date)
+                    : "Today"}
                 </span>
               </p>
             </div>
@@ -228,7 +237,9 @@ export default function DietSuggestions() {
               <Link href="/diet-suggestions/history">
                 <button className="group flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-[#f2b705] border border-white/10 hover:border-[#f2b705] rounded-full transition-all duration-300">
                   <FaHistory className="text-[#f2b705] group-hover:text-black transition-colors text-sm" />
-                  <span className="font-semibold text-sm text-white group-hover:text-black">History</span>
+                  <span className="font-semibold text-sm text-white group-hover:text-black">
+                    History
+                  </span>
                 </button>
               </Link>
               <Link href="/diet-suggestions/custom">
@@ -246,11 +257,15 @@ export default function DietSuggestions() {
                 <div className="absolute inset-0 border-4 border-white/10 rounded-full"></div>
                 <div className="absolute inset-0 border-4 border-[#f2b705] rounded-full border-t-transparent animate-spin"></div>
               </div>
-              <p className="text-gray-400 animate-pulse">Generating your nutritional roadmap...</p>
+              <p className="text-gray-400 animate-pulse">
+                Generating your nutritional roadmap...
+              </p>
             </div>
           ) : error ? (
             <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-8 text-center max-w-2xl mx-auto backdrop-blur-sm">
-              <p className="text-red-400 font-bold text-xl mb-2">Unable to Load Plan</p>
+              <p className="text-red-400 font-bold text-xl mb-2">
+                Unable to Load Plan
+              </p>
               <p className="text-gray-400">{error}</p>
             </div>
           ) : dietPlan?.diet_plan ? (
@@ -259,36 +274,44 @@ export default function DietSuggestions() {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <StatCard
                   label="Total Calories"
-                  value={(dietPlan.diet_plan.breakfast?.total?.calories || 0) +
+                  value={
+                    (dietPlan.diet_plan.breakfast?.total?.calories || 0) +
                     (dietPlan.diet_plan.lunch?.total?.calories || 0) +
-                    (dietPlan.diet_plan.dinner?.total?.calories || 0)}
+                    (dietPlan.diet_plan.dinner?.total?.calories || 0)
+                  }
                   unit="kcal"
                   icon={FaFire}
                   color="#f2b705"
                 />
                 <StatCard
                   label="Total Protein"
-                  value={(dietPlan.diet_plan.breakfast?.total?.protein || 0) +
+                  value={
+                    (dietPlan.diet_plan.breakfast?.total?.protein || 0) +
                     (dietPlan.diet_plan.lunch?.total?.protein || 0) +
-                    (dietPlan.diet_plan.dinner?.total?.protein || 0)}
+                    (dietPlan.diet_plan.dinner?.total?.protein || 0)
+                  }
                   unit="g"
                   icon={FaDrumstickBite}
                   color="#22c55e"
                 />
                 <StatCard
                   label="Total Carbs"
-                  value={(dietPlan.diet_plan.breakfast?.total?.carbs || 0) +
+                  value={
+                    (dietPlan.diet_plan.breakfast?.total?.carbs || 0) +
                     (dietPlan.diet_plan.lunch?.total?.carbs || 0) +
-                    (dietPlan.diet_plan.dinner?.total?.carbs || 0)}
+                    (dietPlan.diet_plan.dinner?.total?.carbs || 0)
+                  }
                   unit="g"
                   icon={FaBreadSlice}
                   color="#f97316"
                 />
                 <StatCard
                   label="Total Fat"
-                  value={(dietPlan.diet_plan.breakfast?.total?.fat || 0) +
+                  value={
+                    (dietPlan.diet_plan.breakfast?.total?.fat || 0) +
                     (dietPlan.diet_plan.lunch?.total?.fat || 0) +
-                    (dietPlan.diet_plan.dinner?.total?.fat || 0)}
+                    (dietPlan.diet_plan.dinner?.total?.fat || 0)
+                  }
                   unit="g"
                   icon={FaTint}
                   color="#ef4444"
@@ -320,7 +343,8 @@ export default function DietSuggestions() {
                 No Diet Plan Found
               </h3>
               <p className="text-gray-400">
-                We couldn't find a plan for today. Try generating a custom one!
+                We couldn&apos;t find a plan for today. Try generating a custom
+                one!
               </p>
             </div>
           )}
