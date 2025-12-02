@@ -106,17 +106,22 @@ export default function SignupPage() {
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         password: formData.password,
+        confirm_password: formData.confirmPassword,
       });
 
-      // Store token if provided
-      if (response.token) {
-        localStorage.setItem("token", response.token);
+      // Store auth_id as token identifier
+      if (response.auth_id) {
+        localStorage.setItem("token", response.auth_id.toString());
       }
 
-      // Store user data if provided
-      if (response.user) {
-        localStorage.setItem("user", JSON.stringify(response.user));
-      }
+      // Store user data
+      const userData = {
+        id: response.auth_id,
+        name: response.name,
+        email: response.email,
+        phone: response.phone,
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
 
       // Redirect to onboarding after successful signup
       router.push("/onboarding");
@@ -124,6 +129,7 @@ export default function SignupPage() {
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.error ||
+        error.response?.data?.detail ||
         "Signup failed. Please try again.";
       setApiError(errorMessage);
     } finally {
@@ -237,7 +243,7 @@ export default function SignupPage() {
 
             {/* API Error Message */}
             {apiError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-900/20 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
                 {apiError}
               </div>
             )}

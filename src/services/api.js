@@ -2,6 +2,8 @@ import axios from "axios";
 
 const PROFILE_API_URL =
   process.env.NEXT_PUBLIC_PROFILE_API_URL || "http://192.168.0.25:8000";
+const AUTH_API_URL =
+  process.env.NEXT_PUBLIC_PROFILE_API_URL || "http://192.168.0.25:8000";
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 const api = axios.create({
@@ -30,11 +32,15 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== "undefined") {
-        const isLoginRequest = error.config?.url?.includes("/auth/login");
+        const isAuthRequest =
+          error.config?.url?.includes("/auth/login") ||
+          error.config?.url?.includes("/auth/signup");
         const isOnLoginPage = window.location.pathname === "/login";
+        const isOnSignupPage = window.location.pathname === "/signup";
 
-        if (!isLoginRequest && !isOnLoginPage) {
+        if (!isAuthRequest && !isOnLoginPage && !isOnSignupPage) {
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
           window.location.href = "/login";
         }
       }
@@ -45,12 +51,24 @@ api.interceptors.response.use(
 
 export const authAPI = {
   login: async (credentials) => {
-    const response = await api.post("/auth/login", credentials);
+    const response = await axios.post(
+      `${AUTH_API_URL}/auth/login`,
+      credentials,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   },
 
   signup: async (userData) => {
-    const response = await api.post("/auth/signup", userData);
+    const response = await axios.post(`${AUTH_API_URL}/auth/signup`, userData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   },
 };

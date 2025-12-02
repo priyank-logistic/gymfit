@@ -34,12 +34,9 @@ export default function LoginPage() {
     const newErrors = {};
 
     if (!formData.emailOrPhone.trim()) {
-      newErrors.emailOrPhone = "Email or phone number is required";
-    } else if (
-      !/^[\w\.-]+@[\w\.-]+\.\w+$/.test(formData.emailOrPhone) &&
-      !/^\+?[\d\s-()]+$/.test(formData.emailOrPhone)
-    ) {
-      newErrors.emailOrPhone = "Please enter a valid email or phone number";
+      newErrors.emailOrPhone = "Email is required";
+    } else if (!/^[\w\.-]+@[\w\.-]+\.\w+$/.test(formData.emailOrPhone)) {
+      newErrors.emailOrPhone = "Please enter a valid email address";
     }
 
     if (!formData.password) {
@@ -81,23 +78,30 @@ export default function LoginPage() {
 
     try {
       const response = await authAPI.login({
-        email_or_phone: formData.emailOrPhone,
+        username: formData.emailOrPhone.trim(),
         password: formData.password,
       });
 
-      if (response.token) {
-        localStorage.setItem("token", response.token);
+      // Store auth_id as token identifier
+      if (response.auth_id) {
+        localStorage.setItem("token", response.auth_id.toString());
       }
 
-      if (response.user) {
-        localStorage.setItem("user", JSON.stringify(response.user));
-      }
+      // Store user data
+      const userData = {
+        id: response.auth_id,
+        name: response.name,
+        email: response.email,
+        phone: response.phone || "",
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
 
       router.push("/dashboard");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.error ||
+        error.response?.data?.detail ||
         "Login failed. Please check your credentials and try again.";
       setApiError(errorMessage);
     } finally {
@@ -141,15 +145,15 @@ export default function LoginPage() {
         <div className="bg-black border border-[#f2b705]/20 rounded-2xl shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             <AuthInput
-              label="Email or Phone"
-              type="text"
+              label="Email"
+              type="email"
               name="emailOrPhone"
               value={formData.emailOrPhone}
               onChange={handleChange}
-              placeholder="Enter your email or phone number"
+              placeholder="Enter your email"
               error={errors.emailOrPhone}
               required
-              autoComplete="username"
+              autoComplete="email"
             />
 
             <AuthInput
