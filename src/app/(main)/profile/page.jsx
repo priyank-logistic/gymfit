@@ -123,24 +123,18 @@ export default function Profile() {
         email: user.email,
         height: parseFloat(editFormData.height),
         weight: parseFloat(editFormData.weight),
-        fitness_profile: {
-          goal: editFormData.goal,
-          activity_level: editFormData.activity_level,
-          medical_conditions: editFormData.medical_conditions,
-          injuries: editFormData.injuries,
-          workout_time_available: editFormData.workout_time_available,
-        },
-        diet_preferences: {
-          type: editFormData.diet_type,
-          allergies: editFormData.allergies,
-          dislikes: editFormData.dislikes,
-          budget: editFormData.budget,
-          meal_times: {
-            breakfast: editFormData.breakfast_time,
-            lunch: editFormData.lunch_time,
-            dinner: editFormData.dinner_time,
-          },
-        },
+        goal: editFormData.goal,
+        activity_level: editFormData.activity_level,
+        medical_conditions: editFormData.medical_conditions,
+        injuries: editFormData.injuries,
+        workout_time_available: editFormData.workout_time_available,
+        diet_type: editFormData.diet_type,
+        allergies: editFormData.allergies,
+        dislikes: editFormData.dislikes,
+        budget: editFormData.budget,
+        breakfast_time: editFormData.breakfast_time,
+        lunch_time: editFormData.lunch_time,
+        dinner_time: editFormData.dinner_time,
       };
 
       await profileAPI.updateProfile(updateData);
