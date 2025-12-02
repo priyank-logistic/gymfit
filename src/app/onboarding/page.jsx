@@ -38,6 +38,22 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [stepDirection, setStepDirection] = useState("forward");
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  // Protect onboarding page - only accessible after signup/login
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+
+      // If no token or user data, redirect to signup
+      if (!token || !user) {
+        router.push("/signup");
+      } else {
+        setCheckingAuth(false);
+      }
+    }
+  }, [router]);
 
   const getUserData = () => {
     if (typeof window !== "undefined") {
@@ -557,6 +573,18 @@ export default function OnboardingPage() {
         return null;
     }
   };
+
+  // Show loading while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#f2b705] mb-4"></div>
+          <p className="text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
