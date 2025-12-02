@@ -94,18 +94,12 @@ export default function TakeFollowUp() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.post(
-          "http://192.168.0.25:8000/profile/workout-plan",
-          {
-            name: user.name,
-            email: user.email,
-          }
-        );
+        const response = await profileAPI.getWorkoutPlan(user.name, user.email);
 
-        setWorkoutPlan(response.data);
-        if (response.data?.workout_plan) {
+        setWorkoutPlan(response);
+        if (response?.workout_plan) {
           const todayDay = getTodayDay();
-          const todayWorkout = response.data.workout_plan[todayDay];
+          const todayWorkout = response.workout_plan[todayDay];
 
           if (todayWorkout && todayWorkout.exercises) {
             setTodayExercises(todayWorkout.exercises);
