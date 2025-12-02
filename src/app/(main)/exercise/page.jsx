@@ -98,20 +98,14 @@ export default function Exercise() {
         setLoading(true);
         setError(null);
 
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_PROFILE_API_URL}/profile/workout-plan`,
-          {
-            name: user.name,
-            email: user.email,
-          }
-        );
+        const response = await profileAPI.getWorkoutPlan(user.name, user.email);
 
-        setWorkoutPlan(response.data);
-        if (response.data?.workout_plan) {
-          const days = Object.keys(response.data.workout_plan);
+        setWorkoutPlan(response);
+        if (response?.workout_plan) {
+          const days = Object.keys(response.workout_plan);
           if (days.length > 0) {
             const todayDay = getTodayDay();
-            if (response.data.workout_plan[todayDay]) {
+            if (response.workout_plan[todayDay]) {
               setSelectedDay(todayDay);
             } else {
               setSelectedDay(days[0]);

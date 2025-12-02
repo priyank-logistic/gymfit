@@ -82,9 +82,9 @@ export default function LoginPage() {
         password: formData.password,
       });
 
-      // Store auth_id as token identifier
-      if (response.auth_id) {
-        localStorage.setItem("token", response.auth_id.toString());
+      // Store access_token from response
+      if (response.access_token) {
+        localStorage.setItem("token", response.access_token);
       }
 
       // Store user data
